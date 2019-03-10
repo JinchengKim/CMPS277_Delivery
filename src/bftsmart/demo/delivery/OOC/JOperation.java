@@ -1,5 +1,9 @@
 package bftsmart.demo.delivery.OOC;
 
+import bftsmart.demo.bftmap.BFTMapRequestType;
+
+import java.io.*;
+
 /**
  * Created by lijin on 3/4/19.
  */
@@ -15,10 +19,11 @@ public class JOperation {
     public int type;
     public String key;
     public String val;
+    public int tid;
 
-
-    JOperation(int type, String k, String v){
+    public JOperation(int type, int tid, String k, String v){
         this.type = type;
+        this.tid = tid;
         this.key = k;
         this.val = v;
     }

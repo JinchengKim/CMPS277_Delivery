@@ -29,4 +29,11 @@ public class BFTMapRequestType {
 	static final int TAB_CREATE_CHECK = 10;
 	static final int EXIT = 11;
 
+
+	static final int WRITE = 12;
+	static final int READ = 13;
+	static final int COMMIT = 14;
+	static final int ABORT = 15;
+
+
 }

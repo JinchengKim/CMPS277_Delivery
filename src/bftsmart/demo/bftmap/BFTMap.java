@@ -20,16 +20,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
-import java.util.Map;
 
 import bftsmart.tom.ServiceProxy;
 
@@ -69,6 +66,32 @@ public class BFTMap implements Map<String, Map<String,byte[]>> {
 			return null;
 		}
 
+	}
+
+	public List<String> getKeys(String tableName){
+		try {
+			out = new ByteArrayOutputStream();
+			DataOutputStream dos = new DataOutputStream(out);
+			dos.writeInt(BFTMapRequestType.GET);
+			dos.writeUTF(tableName);
+
+			byte[] rep = KVProxy.invokeUnordered(out.toByteArray());
+			ByteArrayInputStream bis = new ByteArrayInputStream(rep) ;
+			ObjectInputStream in = new ObjectInputStream(bis) ;
+			Map<String,byte[]> table = (Map<String,byte[]>) in.readObject();
+			in.close();
+			List<String> ret = new ArrayList<String>();
+			Iterator itr = table.keySet().iterator();
+			while (itr.hasNext())
+				ret.add(itr.next() + "");
+			return ret;
+		} catch (ClassNotFoundException ex) {
+			Logger.getLogger(BFTMap.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		} catch (IOException ex) {
+			Logger.getLogger(BFTMap.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		}
 	}
 
 	public byte[] getEntry(String tableName,String key) {
